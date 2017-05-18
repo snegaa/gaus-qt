@@ -49,8 +49,9 @@ void CrossItem::createKernel(double **masKernel, int radius)
 
 void CrossItem::modern()
 {       
-    int radius = 11;
+    int radius = 3;
     int koffBorder = radius / 2 * 2;
+    int halfKoff = koffBorder / 2;
     QVector< QVector<QColor> > start; // [img.width()+2][img.height()+2]; //массив пикселей?
     start.resize(img.width()+koffBorder);
     for (int i = 0; i < img.width()+koffBorder; ++i) start[i].resize(img.height()+koffBorder);
