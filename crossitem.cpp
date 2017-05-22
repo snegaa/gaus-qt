@@ -11,11 +11,9 @@
 
 CrossItem::CrossItem(QGraphicsItem *parent)
 {
-
     qDebug() << img.load("/tiger.bmp");
+
     //img.load("/2.jpeg");
-
-
     //img.load("./debug/2.bmp");
 }
 
@@ -33,7 +31,7 @@ void CrossItem::createKernel(double **masKernel, int radius)
             for(int v = -1 * radius / 2; v <= radius / 2; v++)
             {
                 r = (u*u + v*v);
-                masKernel[u + koff][v + koff] = exp(-r/s)/(M_PI * s);
+                masKernel[u + koff][v + koff] = 1 /(M_PI * s)*exp(-r/s);
                 div += masKernel[u + koff][v + koff];
             }
         }
@@ -61,9 +59,9 @@ void CrossItem::modern()
     start[img.width()+1][img.height()+1] = QColor(img.pixel(img.width()-1, img.height()-1));
 
 
-    double** gaus = new double*[radius]; //[radius][radius] = {{1,1,1},{1,1,1},{1,1,1}};
-    for (int k = 0; k < radius; ++k) gaus[k] = new double[radius];
-    this->createKernel((double**)gaus, radius);
+   // double** gaus = new double*[radius]; //[radius][radius] = {{1,1,1},{1,1,1},{1,1,1}};
+   // for (int k = 0; k < radius; ++k) gaus[k] = new double[radius];
+   // this->createKernel((double**)gaus, radius);
 
     for (int y = 0; y < img.height(); ++y)
     {
@@ -83,8 +81,10 @@ void CrossItem::modern()
             start[x+1][y+1] = QColor(img.pixel(x, y));
         }
     }
-
+//типо Гаусса
    // double gaus[radius][radius] = {{0.5,0.75,0.5},{0.75,1,0.75},{0.5,0.75,0.5}};
+  //усиление резкости
+    double gaus[radius][radius] = {{-1,-1,-1},{-1,9,-1},{-1,-1,-1}};
 
     for (int x = 1; x <= img.width(); ++x)
     {

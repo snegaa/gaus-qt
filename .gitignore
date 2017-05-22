@@ -78,3 +78,5 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 1.pro.user
+kernelGausse/kernelGausse.pro.user
+kernelGausse/kernelGausse.pro
