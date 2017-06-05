@@ -59,9 +59,9 @@ void CrossItem::modern()
     start[img.width()+1][img.height()+1] = QColor(img.pixel(img.width()-1, img.height()-1));
 
 
-   // double** gaus = new double*[radius]; //[radius][radius] = {{1,1,1},{1,1,1},{1,1,1}};
-   // for (int k = 0; k < radius; ++k) gaus[k] = new double[radius];
-   // this->createKernel((double**)gaus, radius);
+  //  double** gaus = new double*[radius]; //[radius][radius] = {{1,1,1},{1,1,1},{1,1,1}};
+  // for (int k = 0; k < radius; ++k) gaus[k] = new double[radius];
+ //   this->createKernel((double**)gaus, radius);
 
     for (int y = 0; y < img.height(); ++y)
     {
@@ -81,10 +81,29 @@ void CrossItem::modern()
             start[x+1][y+1] = QColor(img.pixel(x, y));
         }
     }
-//типо Гаусса
-   // double gaus[radius][radius] = {{0.5,0.75,0.5},{0.75,1,0.75},{0.5,0.75,0.5}};
-  //усиление резкости
-    double gaus[radius][radius] = {{-1,-1,-1},{-1,9,-1},{-1,-1,-1}};
+
+  //  double gaus[radius][radius] = {{0.5,0.75,0.5},{0.75,1,0.75},{0.5,0.75,0.5}}; // Гаусс
+
+  //  double gaus[radius][radius] = {{-1,-1,-1},{-1,9,-1},{-1,-1,-1}}; //контурный
+
+  //  double gaus[radius][radius] = {{0,-1,0},{-1,5,-1},{0,-1,0}}; //мяглая контур
+
+    //double gaus[radius][radius] = {{-2,-1,0},{-1,1,1},{0,1,2}}; //эффект выдавливая. или придумать
+
+    //double gaus[radius][radius] = {{1,3,1},{3,9,3},{1,3,1}};     //смягчение(плохо видно)
+
+        //double gaus[radius][radius] = {{-1,-1,-1},{0,0,0},{1,1,1}}; //почему-то становится черным все...
+
+    //double gaus[radius][radius] = {{-5, 0,0},{0,0,0},{0,0,5}}; //почему-то становится черным все...
+
+    //double gaus[radius][radius] = {{1,-2,1},{-2,5,-2},{1,-2,1}}; //заострение - не больше 1 раза
+
+    //double gaus[radius][radius] = {{1,0,1},{0,0,0},{1,0,1}}; //диагонал размытие (+увеличение мелких деталей)
+
+    double gaus[radius][radius] = {{0,0,0},{2,20,200},{0,0,0}}; //яркостный контур (+ползет вверх)
+
+    double gaus[radius][radius] = {{0,0,0},{2,20,200},{0,0,0}}; //
+
 
     for (int x = 1; x <= img.width(); ++x)
     {
