@@ -25,10 +25,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    crossitem.cpp
+    crossitem.cpp \
+    filters/basefilter.cpp \
+    filters/gausfilter.cpp \
+    filters/konturfilter.cpp \
+    filters/medianfilter.cpp \
+    filters/rezkfilter.cpp \
+    filters/relfilter.cpp \
+    filters/yarkfilter.cpp
 
 HEADERS  += mainwindow.h \
-    crossitem.h
+    crossitem.h \
+    filters/basefilter.h \
+    filters/gausfilter.h \
+    filters/konturfilter.h \
+    filters/medianfilter.h \
+    filters/rezkfilter.h \
+    filters/relfilter.h \
+    filters/yarkfilter.h
 
 FORMS    += mainwindow.ui
 

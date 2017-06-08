@@ -6,47 +6,22 @@
 #include <QImage>
 #include <QColor>
 #include <QRgb>
-#include <math.h>
 #include <QVector>
+#include <math.h>
+#include <QGraphicsScene>
 
-CrossItem::CrossItem(QGraphicsItem *parent)
+CrossItem::CrossItem(QString aFileName, QGraphicsItem *parent)
 {
-    qDebug() << img.load("/tiger.bmp");
+    qDebug() << img.load(aFileName);
+    mFileName = aFileName;
 
     //img.load("/2.jpeg");
     //img.load("./debug/2.bmp");
 }
 
-void CrossItem::createKernel(double **masKernel, int radius)
-{
-    //double masKernel[3][3];// значения радиуса(val) размытия, по ст.=3
-    double sigma = 1.0;// стандартьное отклонение по стандарту=1
-    double r, s = 2.0 * sigma * sigma;//радиус(r) и 2сигма в квадрате
-    double div = 0.0; // сумма для нормализации
-
-    int koff = radius / 2;
-
-    for (int u = -1 * radius / 2; u <= radius / 2; u++)
-        {
-            for(int v = -1 * radius / 2; v <= radius / 2; v++)
-            {
-                r = (u*u + v*v);
-                masKernel[u + koff][v + koff] = 1 /(M_PI * s)*exp(-r/s);
-                div += masKernel[u + koff][v + koff];
-            }
-        }
-
-    for (int i = 0; i < radius; ++i) //для нормализации чтобы не осветлялось или затемнялось изображение
-    {
-        for (int j = 0; j < radius; ++j)
-        {
-             masKernel[i][j] /= div;
-        }
-    }
-}
-
-void CrossItem::modern()
+void CrossItem::modern(BaseFilter *filter)
 {       
+    state = 0.0;
     int radius = 3;
     int koffBorder = radius / 2 * 2;
     int halfKoff = koffBorder / 2;
@@ -79,36 +54,23 @@ void CrossItem::modern()
         for (int y = 0; y < img.height(); ++y)
         {
             start[x+1][y+1] = QColor(img.pixel(x, y));
+            setState(x,y, img.width(), img.height(), 1);
         }
     }
 
-  //  double gaus[radius][radius] = {{0.5,0.75,0.5},{0.75,1,0.75},{0.5,0.75,0.5}}; // Гаусс
+    double** gaus = new double*[radius];
+    for (int i = 0; i < radius; ++i)
+    {
+        gaus[i] = new double[radius];
+    }
 
-  //  double gaus[radius][radius] = {{-1,-1,-1},{-1,9,-1},{-1,-1,-1}}; //контурный
-
-  //  double gaus[radius][radius] = {{0,-1,0},{-1,5,-1},{0,-1,0}}; //мяглая контур
-
-    //double gaus[radius][radius] = {{-2,-1,0},{-1,1,1},{0,1,2}}; //эффект выдавливая. или придумать
-
-    //double gaus[radius][radius] = {{1,3,1},{3,9,3},{1,3,1}};     //смягчение(плохо видно)
-
-        //double gaus[radius][radius] = {{-1,-1,-1},{0,0,0},{1,1,1}}; //почему-то становится черным все...
-
-    //double gaus[radius][radius] = {{-5, 0,0},{0,0,0},{0,0,5}}; //почему-то становится черным все...
-
-    //double gaus[radius][radius] = {{1,-2,1},{-2,5,-2},{1,-2,1}}; //заострение - не больше 1 раза
-
-    //double gaus[radius][radius] = {{1,0,1},{0,0,0},{1,0,1}}; //диагонал размытие (+увеличение мелких деталей)
-
-    double gaus[radius][radius] = {{0,0,0},{2,20,200},{0,0,0}}; //яркостный контур (+ползет вверх)
-
-    double gaus[radius][radius] = {{0,0,0},{2,20,200},{0,0,0}}; //
-
+    filter->createKernel(gaus, radius);
 
     for (int x = 1; x <= img.width(); ++x)
     {
         for (int y = 1; y <= img.height(); ++y)
         {
+            setState(x, y, img.height(), img.width(), 2);
             double summ_pixel = 0;
             double summ_gaus = 0;
             int koff = -1 * radius / 2;
@@ -122,11 +84,13 @@ void CrossItem::modern()
             }
             int result = ceil(summ_pixel / summ_gaus);
             if (result > 255) result = 255;
+            if (result < 0) result = 0;
             QColor value = QColor(img.pixel(x-1, y-1));
             value.setHsv(value.hue(), value.saturation(), result, value.alpha());
             img.setPixel(x-1, y-1, value.rgb());
         }
     }
+    state = 100;
 
 //    QColor color(img.pixel(x, y));// координаты пикселей от начала до конца изображения
 //    int new_value = 1;
@@ -146,3 +110,28 @@ void CrossItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->drawImage(boundingRect().toRect(), img);
 }
 
+QImage CrossItem::getImage()
+{
+    return img;
+}
+
+double CrossItem::getState()
+{
+    return state;
+}
+
+void CrossItem::setState(int i, int j, int width, int height, int part)
+{
+    double a = i*height + j;
+    double b = width * height;
+    double res = a / b *100;
+    res /=2.0;
+    if (part == 2) res += 50.0;
+    state = res;
+    if (state > 100) state = 100;
+}
+
+void CrossItem::reload()
+{
+    img.load(mFileName);
+}

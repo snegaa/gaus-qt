@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>609</width>
-    <height>432</height>
+    <width>960</width>
+    <height>503</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,9 +23,9 @@
      </layout>
     </item>
     <item row="1" column="0">
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>Ткни</string>
+     <widget class="QProgressBar" name="progressBar">
+      <property name="value">
+       <number>0</number>
       </property>
      </widget>
     </item>
@@ -36,10 +36,40 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>609</width>
+     <width>960</width>
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Файл</string>
+    </property>
+    <addaction name="open_file"/>
+    <addaction name="reload_file"/>
+    <addaction name="save_file"/>
+    <addaction name="exit"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>Фильтры</string>
+    </property>
+    <addaction name="gaus_filter"/>
+    <addaction name="kontur_filter"/>
+    <addaction name="median_filter"/>
+    <addaction name="rezk_filter"/>
+    <addaction name="rel_filter"/>
+    <addaction name="yrak_filter"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>История</string>
+    </property>
+    <addaction name="history_save"/>
+    <addaction name="history_load"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -50,6 +80,66 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="open_file">
+   <property name="text">
+    <string>Открыть</string>
+   </property>
+  </action>
+  <action name="save_file">
+   <property name="text">
+    <string>Сохранить</string>
+   </property>
+  </action>
+  <action name="exit">
+   <property name="text">
+    <string>Выйти</string>
+   </property>
+  </action>
+  <action name="gaus_filter">
+   <property name="text">
+    <string>Гаусса</string>
+   </property>
+  </action>
+  <action name="kontur_filter">
+   <property name="text">
+    <string>Контурный</string>
+   </property>
+  </action>
+  <action name="history_save">
+   <property name="text">
+    <string>Сохранить</string>
+   </property>
+  </action>
+  <action name="history_load">
+   <property name="text">
+    <string>Загрузить</string>
+   </property>
+  </action>
+  <action name="reload_file">
+   <property name="text">
+    <string>Переоткрыть</string>
+   </property>
+  </action>
+  <action name="median_filter">
+   <property name="text">
+    <string>Медианный</string>
+   </property>
+  </action>
+  <action name="rezk_filter">
+   <property name="text">
+    <string>Усиление резкости</string>
+   </property>
+  </action>
+  <action name="rel_filter">
+   <property name="text">
+    <string>Повышение рельефности</string>
+   </property>
+  </action>
+  <action name="yrak_filter">
+   <property name="text">
+    <string>Повышение цветового контраста</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
